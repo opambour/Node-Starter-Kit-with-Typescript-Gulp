@@ -22,7 +22,14 @@ We assume you know [Typescript](https://www.typescriptlang.org) and will be codi
     5. **Passport**
 
 ## Usage
-Download or clone this project and run the below command:
+Download or clone this project:
+Clone as: 
+> $ git clone https://github.com/opambour/Node-Starter-Kit-with-Typescript-Gulp.git projectName
+
+Install dependdencies as
+> $ npm install
+
+Run Gulp to generate dist files
 > $ npx gulp or npm run gulp
 
 The above code will automate all task including **nodemon** and **browser-sync**. After running gulp, it will compile all typescript src files and folders to dist folder.
