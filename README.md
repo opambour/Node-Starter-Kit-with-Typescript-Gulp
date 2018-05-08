@@ -39,4 +39,4 @@ Run Gulp to generate dist files
 
 The above code will automate all task including **nodemon** and **browser-sync**. After running gulp, it will compile all typescript src files and folders to dist folder.
 
-**Version #: 1**
+**Version #:** 1.0.0
