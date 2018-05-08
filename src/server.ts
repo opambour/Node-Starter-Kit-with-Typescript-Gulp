@@ -17,4 +17,7 @@ server.listen(portNumber, hostname, (err: Error) => {
 
 	console.log('Web Server running at http://%s:%s', getHostAddress, portNumber);
 	console.log('\npress Ctrl-C to terminate.');
+	console.log('Views Dir:', App.get('views'));
+	console.log('View Engine:', App.get('view engine'));
+	console.log('Static Files Dir:', App.get('static files'));
 });

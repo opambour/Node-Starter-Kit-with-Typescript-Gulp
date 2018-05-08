@@ -46,44 +46,46 @@ gulp.task('compile_ts', () => {
 //         .pipe(gulp.dest('dist')); // save backend.min.js in dist folder
 // });
 
-// restart dev server using nodemon
-gulp.task('dev_server', ['lint_js'], () => {
+// using nodemon
+gulp.task('nodemon', ['lint_js', 'browser_sync'], () => {
     const stream = nodemon({
         script: 'dist/server.js',
         ext: 'njk html js',
         ignore: ['ignored.js'],
-        // tasks: ['lint_js']
+        tasks: ['lint_js', 'browser_sync']
     });
 
     stream.on('start', () => {
-            gulp.task('browser_sync', ['sass'], () => {
-                browserSync.init({
-                    // options
-                    server: {
-                        baseDir: "views",
-                        directory: true,
-                        serveStaticOptions: {
-                            extensions: ["njk"]
-                        }
-                    },
-                    port: 3000,
-                    proxy: 'localhost:3000'
-                }, (err, bs) => {
 
-                });
-
-                // watch for html changes
-                // gulp.watch("views/**/*.njk").on('change', browserSync.reload);
-                // watch for njk changes
-                gulp.watch("views/**/*.njk").on('change', browserSync.reload);
-                // watch for css or sass changes
-                gulp.watch("public/scss/style.scss", ['sass']);
-            });
         })
         .on('crash', () => {
             console.error('Application has crashed!\n');
             stream.emit('restarting in 10 secs...', 10); // restart the server in 10 seconds
         });
+});
+
+gulp.task('browser_sync', ['sass'], () => {
+    browserSync.init(null, {
+        // options
+        // server: {
+        //     baseDir: "views/layout.njk",
+        //     directory: true,
+        //     serveStaticOptions: {
+        //         extensions: ["njk"]
+        //     }
+        // },
+        port: 3000,
+        proxy: 'http://localhost:3000'
+    });
+
+    // watch for html changes
+    // gulp.watch("views/**/*.njk").on('change', browserSync.reload);
+
+    // watch for css or sass changes
+    gulp.watch("public/scss/style.scss", ['sass']);
+
+    // watch for njk changes
+    gulp.watch("views/**/*.njk").on('change', browserSync.reload);
 });
 
 // lint .js file with hintjs
@@ -110,8 +112,10 @@ gulp.task('minify_css', () => {
 
 // precompile nunjucks: template.js
 gulp.task('precompile_njk', () => {
-    return gulp.src('views/**/*')
+    return gulp.src('views/**/*.njk')
         .pipe(nunjucks.precompile())
+        .pipe(concat('templates.js'))
+        // .pipe(uglify())
         .pipe(gulp.dest('views'));
 });
 
@@ -125,7 +129,7 @@ gulp.task('watch', () => {
 });
 
 // run all gulp tasks as default: run gulp as npx gulp or npm run gulp
-gulp.task('default', ['lint_ts', 'compile_ts', 'sass', 'minify_css', 'precompile_njk', 'dev_server', 'watch']);
+gulp.task('default', ['lint_ts', 'compile_ts', 'sass', 'minify_css', 'precompile_njk', 'nodemon', 'watch']);
 
 // In version 4: use this to run all tasks
 // gulp.task('default', gulp.parallel('lint_ts', 'compile_ts', 'minify_js', 'lint_js', 'dev_server', 'watch'));

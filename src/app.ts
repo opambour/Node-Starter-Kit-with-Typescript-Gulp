@@ -12,6 +12,8 @@ import methodOverride from 'method-override';
 
 import { env } from './config/app.env';
 
+import { BasicRouter } from './routes/basic.routes';
+
 class App {
 	// initialize express app
 	public app: express.Application;
@@ -21,7 +23,7 @@ class App {
 		// this.mongooseConnection();
 		this.setMiddleware();
 		this.configureMiddleware();
-		// this.routing();
+		this.routing();
 	}
 
 	// ORM Connection: eg. mongoose
@@ -34,6 +36,7 @@ class App {
 		this.app.set('trust proxy', env.TRUST_PROXY); // trust first proxy
 		this.app.set('port', env.PORT);
 		this.app.set('views', env.VIEWS);
+		this.app.set('static files', env.STATIC_FILES);
 		this.app.set('view engine', env.VIEW_ENGINE);
 	}
 
@@ -45,7 +48,7 @@ class App {
 		// app.use(favicon(path.join(__dirname, 'public', 'img/MEN_logo.png')));
 
 		// serving static files: HTML files, images, fonts, css and so on
-		this.app.use(express.static(env.STATIC_FILES));
+		this.app.use(express.static(this.app.get('static files')));
 
 		// body-parser
 		this.app.use(bodyParser.json());
@@ -102,32 +105,38 @@ class App {
 	}
 
 	// routing
-	// private routing() {
-			// custom 403
-			// this.expressApp.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-			// 		if (err.status === 403) {
-			// 			return res.render('error/403', { title: 'Forbidden', path: req.originalUrl });
-			// 		}
+	private routing() {
+		// basic routes
+		this.app.use('/', BasicRouter);
+		// admin routes
 
-			// 	next();
-			// });
+		// user routes
 
-			// // custom 404 page
-			// this.expressApp.use((req: express.Request, res: express.Response) => {
-			// 	res.status(404).render('error/404',
-			// 		{ title: 'Page Not Found', urlAttempted: req.url, path: req.originalUrl },
-			// 	);
-			// });
+		// custom 403
+		// this.expressApp.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+		// 		if (err.status === 403) {
+		// 			return res.render('error/403', { title: 'Forbidden', path: req.originalUrl });
+		// 		}
 
-			// custom 500 page: comment this during production
-			// this.app.use(function (err, req, res, next) {
-			//     res.status(500); // internal server error
-			//     res.render('errors/500',
-			//     { title: '500 - Internal Server Error', path: req.originalUrl, errors: err.stack });
-			//     //console.error(err.stack);
-			//     next(err.stack);
-			// });
-	// }
+		// 	next();
+		// });
+
+		// // custom 404 page
+		// this.expressApp.use((req: express.Request, res: express.Response) => {
+		// 	res.status(404).render('error/404',
+		// 		{ title: 'Page Not Found', urlAttempted: req.url, path: req.originalUrl },
+		// 	);
+		// });
+
+		// custom 500 page: comment this during production
+		// this.app.use(function (err, req, res, next) {
+		//     res.status(500); // internal server error
+		//     res.render('errors/500',
+		//     { title: '500 - Internal Server Error', path: req.originalUrl, errors: err.stack });
+		//     //console.error(err.stack);
+		//     next(err.stack);
+		// });
+	}
 }
 
 export default new App().app;
