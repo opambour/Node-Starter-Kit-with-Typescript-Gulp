@@ -9,7 +9,15 @@
         "start": "node dist/backend.min.js"
     },
     "keywords": [],
-    "author": "",
+    "author": {
+        "name": "Michael Abebrese-Agyeman",
+        "email": "opambour@hotmail.com",
+        "url": "https://github.com/opambour"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/opambour/Node-Starter-Kit-with-Typescript-Gulp.git"
+    },
     "license": "ISC",
     "devDependencies": {
         "@types/body-parser": "^1.17.0",
